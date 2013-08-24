@@ -1,0 +1,42 @@
+{
+  "author": {
+    "name": "Soares Chen",
+    "email": "soares.chen@gmail.com",
+    "url": "http://soareschen.com"
+  },
+  "name": "quiver-component",
+  "desription": "Component system to allow creation of complex interconnected components",
+  "version": "0.0.1",
+  "homepage": "https://github.com/quiverjs/component",
+  "repository": {
+    "url": "git@github.com:quiverjs/component.git"
+  },
+  "dependencies": {
+    "async": "0.2.x",
+    "quiver-error": "0.0.x",
+    "quiver-copy": "0.0.x",
+    "quiver-merge": "0.0.x",
+    "quiver-param": "0.0.x",
+    "quiver-router": "0.1.x",
+    "quiver-middleware": "0.1.x",
+    "quiver-safe-callback": "0.0.x"
+  },
+  "devDependencies": {
+    "mocha": "1.8.x",
+    "should": "1.2.x",
+    "quiver-stream-channel": "0.0.x",
+    "quiver-stream-convert": "0.0.x"
+  },
+  "bugs": {
+    "url": "https://github.com/quiverjs/component/issues",
+    "email": "quiverjs@soareschen.com"
+  },
+  "licenses": {
+    "type": "MIT",
+    "url": "https://raw.github.com/quiverjs/license/master/LICENSE"
+  },
+  "main": "./lib/component",
+  "scripts": {
+    "test": "make test"
+  }
+}
