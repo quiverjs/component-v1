@@ -66,6 +66,7 @@ var fooHandlerComponent = {
     'foo middleware',
     'foo filter'
   ],
+  handleables: ['bar handler'],
   handlerBuilder: fooHandlerBuilder
 }
 

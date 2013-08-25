@@ -114,3 +114,87 @@ describe('test stream middleware component', function() {
     })
   })
 })
+
+describe('nested filter dependency test', function() {
+  var filter1 = function(config, handler, callback) {
+    var filteredHandler = function(args, inputStreamable, callback) {
+      args.filter1 = 'filter 1'
+      handler(args, inputStreamable, callback)
+    }
+
+    callback(null, filteredHandler)
+  }
+
+  var filter2 = function(config, handler, callback) {
+    var filteredHandler = function(args, inputStreamable, callback) {
+      should.equal(args.filter1, 'filter 1')
+      args.filter2 = 'filter 2'
+      handler(args, inputStreamable, callback)
+    }
+
+    callback(null, filteredHandler)
+  }
+
+  var handlerBuilder = function(config, callback) {
+    var handler = function(args, inputStreamable, callback) {
+      should.equal(args.filter1, 'filter 1')
+      should.equal(args.filter2, 'filter 2')
+
+      var resultStreamable = streamChannel.createEmptyStreamable()
+      resultStreamable.value = 'filter success'
+
+      callback(null, resultStreamable)
+    }
+
+    callback(null, handler)
+  }
+
+  var filter1Component = {
+    name: 'test filter 1',
+    type: 'stream filter',
+    filter: filter1
+  }
+
+  var filter2Component = {
+    name: 'test filter 2',
+    type: 'stream filter',
+    middlewares: [
+      'test filter 1'
+    ],
+    filter: filter2
+  }
+
+  var handlerComponent = {
+    name: 'test handler',
+    type: 'stream handler',
+    middlewares: [
+      'test filter 2'
+    ],
+    handlerBuilder: handlerBuilder
+  }
+
+  var quiverComponents = [
+    filter1Component,
+    filter2Component,
+    handlerComponent
+  ]
+
+  it('nested filter dependency should work', function(callback) {
+    component.installComponents(quiverComponents, function(err, config) {
+      if(err) throw err
+
+      var handleableBuilder = config.quiverHandleableBuilders['test handler']
+      handleableBuilder(config, function(err, handleable) {
+        if(err) throw err
+
+        var handler = handleable.toStreamHandler()
+        handler({}, streamChannel.createEmptyStreamable(), function(err, resultStreamable) {
+          if(err) throw err
+
+          should.equal(resultStreamable.value, 'filter success')
+          callback()
+        })
+      })
+    })
+  })
+})
