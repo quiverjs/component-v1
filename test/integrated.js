@@ -52,7 +52,11 @@ var fooFilter = function(config, handler, callback) {
 var fooMiddleware = function(config, handlerBuilder, callback) {
   config.fooConfig = 'foo config'
 
-  handlerBuilder(config, callback)
+  handlerBuilder(config, function(err, handler) {
+    if(err) return callback(err)
+
+    callback(null, handler)
+  })
 }
 
 var fooHandlerComponent = {
@@ -138,10 +142,11 @@ var testComponentConfig = function(config) {
   should.exist(config.quiverComponents['foo handler'])
 }
 
-var testFooHandler = function(fooHandlerBuilder, config, callback) {
-  fooHandlerBuilder(config, function(err, fooHandler) {
+var testFooHandler = function(fooHandleableBuilder, config, callback) {
+  fooHandleableBuilder(config, function(err, fooHandleable) {
     if(err) return callback(err)
 
+    var fooHandler = fooHandleable.toStreamHandler()
     fooHandler({}, streamChannel.createEmptyStreamable(), 
       function(err, resultStreamable){
         if(err) return callback(err)
@@ -157,10 +162,11 @@ var testFooHandler = function(fooHandlerBuilder, config, callback) {
   })
 }
 
-var testPipelineHandler = function(pipelineHandlerBuilder, config, callback) {
-  pipelineHandlerBuilder(config, function(err, pipelineHandler) {
+var testPipelineHandler = function(pipelineHandleableBuilder, config, callback) {
+  pipelineHandleableBuilder(config, function(err, pipelineHandleable) {
     if(err) return callback(err)
 
+    var pipelineHandler = pipelineHandleable.toStreamHandler()
     pipelineHandler({}, streamChannel.createEmptyStreamable(), 
       function(err, resultStreamable){
         if(err) return callback(err)
@@ -176,10 +182,11 @@ var testPipelineHandler = function(pipelineHandlerBuilder, config, callback) {
   })
 }
 
-var testRouterHandlerBuilder = function(routerHandlerBuilder, config, callback) {
-  routerHandlerBuilder(config, function(err, routerHandler) {
+var testRouterHandlerBuilder = function(routerHandleableBuilder, config, callback) {
+  routerHandleableBuilder(config, function(err, routerHandleable) {
     if(err) return callback(err)
 
+    var routerHandler = routerHandleable.toStreamHandler()
     var args = {
       path: '/bar/path-to-bar'
     }
@@ -199,7 +206,7 @@ var testRouterHandlerBuilder = function(routerHandlerBuilder, config, callback) 
   })
 }
 
-describe('basic component test', function() {
+describe('integrated component test', function() {
   it('overall test', function(callback) {
     component.installComponents(quiverComponents, function(err, config) {
       if(err) throw err
@@ -208,21 +215,21 @@ describe('basic component test', function() {
 
       async.series([
         function(callback) {
-          var fooHandlerBuilder = config.quiverStreamHandlerBuilders['foo handler']
+          var fooHandleableBuilder = config.quiverHandleableBuilders['foo handler']
           
-          testFooHandler(fooHandlerBuilder, copyObject(config), callback)
+          testFooHandler(fooHandleableBuilder, copyObject(config), callback)
         }, 
         function(callback) {
-          var pipelineHandlerBuilder = 
-            config.quiverStreamHandlerBuilders['foo bar pipeline handler']
+          var pipelineHandleableBuilder = 
+            config.quiverHandleableBuilders['foo bar pipeline handler']
           
-          testPipelineHandler(pipelineHandlerBuilder, copyObject(config), callback)
+          testPipelineHandler(pipelineHandleableBuilder, copyObject(config), callback)
         }, 
         function(callback) {
-          var routerHandlerBuilder = 
-            config.quiverStreamHandlerBuilders['foo bar router handler']
+          var routerHandleableBuilder = 
+            config.quiverHandleableBuilders['foo bar router handler']
 
-          testRouterHandlerBuilder(routerHandlerBuilder, copyObject(config), callback)
+          testRouterHandlerBuilder(routerHandleableBuilder, copyObject(config), callback)
         }
       ], callback)
     })
