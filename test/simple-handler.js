@@ -89,7 +89,7 @@ describe('simple handler component test', function() {
         type: 'stream handler',
         handleables: [
           {
-            name: 'test input handler',
+            handler: 'test input handler',
             type: 'simple handler',
             inputType: 'json',
             outputType: 'text'
