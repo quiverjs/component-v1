@@ -20,7 +20,8 @@
     "quiver-router": "0.1.x",
     "quiver-handleable": "0.0.x",
     "quiver-middleware": "0.2.x",
-    "quiver-safe-callback": "0.0.x"
+    "quiver-safe-callback": "0.0.x",
+    "quiver-simple-handler": "0.0.x"
   },
   "devDependencies": {
     "mocha": "1.8.x",
