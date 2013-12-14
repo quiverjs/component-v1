@@ -63,4 +63,26 @@ describe('handler component test', function() {
       })
     })
   })
+
+  it('extend handler test', function(callback) {
+    var extendComponent = {
+      name: 'extend handler',
+      type: 'stream handler',
+      configOverride: {
+        value: 'config value'
+      },
+      handler: 'test handler'
+    }
+
+    quiverComponents.push(extendComponent)
+
+    component.installComponents(quiverComponents, function(err, config) {
+      if(err) throw err
+
+      var handleableBuilder = config.quiverHandleableBuilders['extend handler']
+      should.exist(handleableBuilder)
+
+      handleableBuilder(config, callback)
+    })
+  })
 })

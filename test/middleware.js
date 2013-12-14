@@ -47,7 +47,6 @@ describe('test stream middleware component', function() {
       }
 
       var responseStreamable = streamChannel.createEmptyStreamable()
-      responseStreamable.value = 'response body'
 
       callback(null, responseHead, responseStreamable)
     }
@@ -195,6 +194,55 @@ describe('nested filter dependency test', function() {
           callback()
         })
       })
+    })
+  })
+})
+
+describe('extend middleware test', function(callback) {
+  var middleware = function(config, handlerBuilder, callback) {
+    should.equal(config.middlewareConfig, 'middleware config')
+
+    handlerBuilder(config, callback)
+  }
+
+  var handlerBuilder = function(config, callback) {
+    var handler = function(args, inputStreamable, callback) {
+      callback(null, inputStreamable)
+    }
+
+    callback(null, handler)
+  }
+
+  var quiverComponents = [
+    {
+      name: 'middleware 1',
+      type: 'stream middleware',
+      middleware: middleware
+    },
+    {
+      name: 'middleware 2',
+      type: 'stream middleware',
+      configOverride: {
+        middlewareConfig: 'middleware config'
+      },
+      middleware: 'middleware 1'
+    },
+    {
+      name: 'test handler',
+      type: 'stream handler',
+      middlewares: [
+        'middleware 2'
+      ],
+      handlerBuilder: handlerBuilder
+    }
+  ]
+
+  it('middleware should get config', function(callback) {
+    component.installComponents(quiverComponents, function(err, config) {
+      if(err) throw err
+
+      var handleableBuilder = config.quiverHandleableBuilders['test handler']
+      handleableBuilder(config, callback)
     })
   })
 })
