@@ -6,7 +6,7 @@
   },
   "name": "quiver-component",
   "desription": "Component system to allow creation of complex interconnected components",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/quiverjs/component",
   "repository": {
     "url": "git@github.com:quiverjs/component.git"
@@ -14,7 +14,7 @@
   "dependencies": {
     "async": "0.2.x",
     "quiver-error": "0.0.x",
-    "quiver-copy": "0.0.x",
+    "quiver-copy": "0.1.x",
     "quiver-merge": "0.0.x",
     "quiver-param": "0.0.x",
     "quiver-router": "0.1.x",
