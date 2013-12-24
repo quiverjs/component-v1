@@ -17,8 +17,6 @@ describe('test stream middleware component', function() {
 
           should.equal(resultStreamable.value, 'handler result')
           
-          handler.modifiedByMiddleware = true
-
           callback(null, handler)
         })
     })
@@ -93,7 +91,6 @@ describe('test stream middleware component', function() {
         if(err) return callback(err)
 
         var handler = handleable.toStreamHandler()
-        should.exist(handler.modifiedByMiddleware)
 
         callback(null)
       })
