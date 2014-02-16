@@ -77,12 +77,43 @@ describe('handler component test', function() {
     quiverComponents.push(extendComponent)
 
     component.installComponents(quiverComponents, function(err, config) {
-      if(err) throw err
+      if(err) return callback(err)
 
       var handleableBuilder = config.quiverHandleableBuilders['extend handler']
       should.exist(handleableBuilder)
 
       handleableBuilder(config, callback)
+    })
+  })
+
+  it('handler instance test', function(callback) {
+    var echoHandler = function(args, inputStreamable, callback) {
+      callback(null, inputStreamable)
+    }
+
+    var handlerComponent = {
+      name: 'test handler instance',
+      type: 'stream handler',
+      handler: echoHandler
+    }
+
+    var quiverComponents = [handlerComponent]
+    component.installComponents(quiverComponents, function(err, config) {
+      if(err) return callback(err)
+
+      var handleableBuilder = config.quiverHandleableBuilders['test handler instance']
+      handleableBuilder({}, function(err, handleable) {
+        if(err) return callback(err)
+
+        var handler = handleable.toStreamHandler()
+        var inputStreamable = streamChannel.createEmptyStreamable()
+        handler({}, inputStreamable, function(err, resultStreamable) {
+          if(err) return callback(err)
+          
+          should.equal(inputStreamable, resultStreamable)
+          callback()
+        })
+      })
     })
   })
 })

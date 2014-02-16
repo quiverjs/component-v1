@@ -5,9 +5,10 @@ var should = require('should')
 var componentLib = require('../lib/component')
 var safeCallbackLib = require('quiver-safe-callback')
 var streamChannel  = require('quiver-stream-channel')
-safeCallbackLib.setCallbackTimeout(500)
 
 describe('timeout test', function() {
+  safeCallbackLib.setCallbackTimeout(500)
+  
   it('handler builder timeout test', function(callback) {
     this.timeout(5000)
 
