@@ -59,83 +59,67 @@ var fooMiddleware = function(config, handlerBuilder, callback) {
   })
 }
 
-var fooHandlerComponent = {
-  name: 'foo handler',
-  type: 'stream handler',
-  middlewares: [
-    'foo middleware',
-    'foo filter'
-  ],
-  handleables: ['bar handler'],
-  handlerBuilder: fooHandlerBuilder
-}
-
-var barHandlerComponent = {
-  name: 'bar handler',
-  type: 'stream handler',
-  configOverride: {
-    barConfig: 'bar config'
-  },
-  handlerBuilder: barHandlerBuilder
-}
-
-var fooBarPipelineHandlerComponent = {
-  name: 'foo bar pipeline handler',
-  type: 'stream pipeline',
-  pipeline: [
-    'foo handler',
-    'bar handler'
-  ]
-}
-
-var fooFilterComponent = {
-  name: 'foo filter',
-  type: 'stream filter',
-  filter: fooFilter
-}
-
-var fooMiddlewareComponent = {
-  name: 'foo middleware',
-  type: 'stream middleware',
-  middleware: fooMiddleware
-}
-
-var fooBarRouteList = [
-  {
-    routeType: 'static',
-    path: '/foo',
-    handler: 'foo handler'
-  },
-  {
-    routeType: 'regex',
-    regex: /^\/bar\/(.+)$/,
-    matchFields: ['barPath'],
-    handler: 'bar handler'
-  }
-]
-
-var fooBarRouteListComponent = {
-  name: 'foo bar route list',
-  type: 'route list',
-  routeList: fooBarRouteList
-}
-
-var fooBarRouterComponent = {
-  name: 'foo bar router handler',
-  type: 'router',
-  routeLists: [
-    'foo bar route list'
-  ]
-}
-
 var quiverComponents = [
-  fooHandlerComponent,
-  barHandlerComponent,
-  fooBarPipelineHandlerComponent,
-  fooFilterComponent,
-  fooMiddlewareComponent,
-  fooBarRouteListComponent,
-  fooBarRouterComponent
+  {
+    name: 'foo handler',
+    type: 'stream handler',
+    middlewares: [
+      'foo middleware',
+      'foo filter'
+    ],
+    handleables: ['bar handler'],
+    handlerBuilder: fooHandlerBuilder
+  },
+  {
+    name: 'bar handler',
+    type: 'stream handler',
+    configOverride: {
+      barConfig: 'bar config'
+    },
+    handlerBuilder: barHandlerBuilder
+  },
+  {
+    name: 'foo bar pipeline handler',
+    type: 'stream pipeline',
+    pipeline: [
+      'foo handler',
+      'bar handler'
+    ]
+  },
+  {
+    name: 'foo filter',
+    type: 'stream filter',
+    filter: fooFilter
+  },
+  {
+    name: 'foo middleware',
+    type: 'stream middleware',
+    middleware: fooMiddleware
+  },
+  {
+    name: 'foo bar route list',
+    type: 'route list',
+    routeList: [
+      {
+        routeType: 'static',
+        path: '/foo',
+        handler: 'foo handler'
+      },
+      {
+        routeType: 'regex',
+        regex: /^\/bar\/(.+)$/,
+        matchFields: ['barPath'],
+        handler: 'bar handler'
+      }
+    ]
+  },
+  {
+    name: 'foo bar router handler',
+    type: 'router',
+    routeLists: [
+      'foo bar route list'
+    ]
+  }
 ]
 
 var testComponentConfig = function(config) {
