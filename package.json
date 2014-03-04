@@ -18,6 +18,7 @@
     "quiver-merge": "~0.0.1",
     "quiver-param": "~0.0.2",
     "quiver-router": "~0.1.0",
+    "quiver-config": "~0.0.6",
     "quiver-handleable": "~0.1.1",
     "quiver-middleware": "~0.3.2",
     "quiver-safe-callback": "~0.1.1",

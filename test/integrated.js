@@ -6,7 +6,7 @@ var should = require('should')
 var streamChannel  = require('quiver-stream-channel')
 var streamConvert = require('quiver-stream-convert')
 var copyObject = require('quiver-copy').copyObject
-var component = require('../lib/component')
+var componentLib = require('../lib/component')
 
 var fooHandlerBuilder = function(config, callback) {
   config.fooConfig.should.equal('foo config')
@@ -193,7 +193,7 @@ var testRouterHandlerBuilder = function(routerHandleableBuilder, config, callbac
 
 describe('integrated component test', function() {
   it('overall test', function(callback) {
-    component.installComponents(quiverComponents, function(err, config) {
+    componentLib.installComponents(quiverComponents, function(err, config) {
       if(err) throw err
 
       testComponentConfig(config)
@@ -217,6 +217,21 @@ describe('integrated component test', function() {
           testRouterHandlerBuilder(routerHandleableBuilder, copyObject(config), callback)
         }
       ], callback)
+    })
+  })
+
+  it('invalid component name test', function(callback) {
+    var quiverComponents = [
+      {
+        name: '[contain] (special) @character',
+        type: 'stream handler',
+        handlerBuilder: fooHandlerBuilder
+      }
+    ]
+
+    componentLib.installComponents(quiverComponents, function(err, config) {
+      should.exists(err)
+      callback()
     })
   })
 })

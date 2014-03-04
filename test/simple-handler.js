@@ -3,6 +3,7 @@
 
 var should = require('should')
 var streamConvert = require('quiver-stream-convert')
+var configLib = require('quiver-config')
 var component = require('../lib/component')
 
 describe('simple handler component test', function() {
@@ -47,6 +48,38 @@ describe('simple handler component test', function() {
             text.should.equal('result')
             callback()
           })
+        })
+      })
+    })
+  })
+
+  it('simple handler component test', function(callback) {
+    var simpleHandler = function(args, input, callback) {
+      callback(null, input.toUpperCase())
+    }
+
+    var quiverComponents = [
+      {
+        name: 'test handler',
+        type: 'simple handler',
+        inputType: 'text',
+        outputType: 'text',
+        handler: simpleHandler
+      }
+    ]
+
+    component.installComponents(quiverComponents, function(err, config) {
+      if(err) return callback(err)
+      
+      configLib.loadSimpleHandler(config, 'test handler', 'text', 'text', 
+      function(err, handler) {
+        if(err) return callback(err)
+        
+        handler({}, 'hello world', function(err, result) {
+          if(err) return callback(err)
+          
+          should.equal(result, 'HELLO WORLD')
+          callback()
         })
       })
     })
