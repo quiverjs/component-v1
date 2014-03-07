@@ -64,6 +64,7 @@ describe('simple handler component test', function() {
         type: 'simple handler',
         inputType: 'text',
         outputType: 'text',
+        resultContentType: 'text/html',
         handler: simpleHandler
       }
     ]
@@ -71,15 +72,21 @@ describe('simple handler component test', function() {
     component.installComponents(quiverComponents, function(err, config) {
       if(err) return callback(err)
       
-      configLib.loadSimpleHandler(config, 'test handler', 'text', 'text', 
+      configLib.loadSimpleHandler(config, 'test handler', 'text', 'streamable', 
       function(err, handler) {
         if(err) return callback(err)
         
-        handler({}, 'hello world', function(err, result) {
+        handler({}, 'hello world', function(err, resultStreamable) {
           if(err) return callback(err)
+
+          should.equal(resultStreamable.contentType, 'text/html')
           
-          should.equal(result, 'HELLO WORLD')
-          callback()
+          streamConvert.streamableToText(resultStreamable, function(err, result) {
+            if(err) return callback(err)
+            
+            should.equal(result, 'HELLO WORLD')
+            callback()
+          })
         })
       })
     })
