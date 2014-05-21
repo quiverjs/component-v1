@@ -172,6 +172,7 @@ var testRouterHandlerBuilder = function(routerHandleableBuilder, config, callbac
     if(err) return callback(err)
 
     var routerHandler = routerHandleable.toStreamHandler()
+
     var args = {
       path: '/bar/path-to-bar'
     }
