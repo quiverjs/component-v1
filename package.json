@@ -17,7 +17,7 @@
     "quiver-error": "~0.1.0",
     "quiver-merge": "~0.0.1",
     "quiver-param": "~0.0.2",
-    "quiver-router": "~0.2.0",
+    "quiver-router": "~0.2.1",
     "quiver-config": "~0.0.7",
     "quiver-handleable": "~0.1.1",
     "quiver-middleware": "~0.3.2",
